@@ -1,4 +1,8 @@
-enum RelacionamentosMovimentacao {  asdf}
+import 'package:biribi_financas/models/conta.dart';
+import 'package:biribi_financas/models/grupo.dart';
+import 'package:biribi_financas/models/usuario.dart';
+
+enum RelacionamentosMovimentacao { conta, usuario, grupo }
 
 class Movimentacao {
   int id;
@@ -13,15 +17,16 @@ class Movimentacao {
   int idGrupo;
   Grupo grupo;
 
-  Movimentacao(
-      {this.id,
-      this.dataCriacao,
-      this.dataVencimento,
-      this.valor,
-      this.tipo,
-      this.idConta,
-      this.idUsuario,
-      this.idGrupo,});
+  Movimentacao({
+    this.id,
+    this.dataCriacao,
+    this.dataVencimento,
+    this.valor,
+    this.tipo,
+    this.idConta,
+    this.idUsuario,
+    this.idGrupo,
+  });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -36,18 +41,16 @@ class Movimentacao {
     };
   }
 
-  // Movimentacao.fromMap(Map<String, dynamic> map) {
-  //   id = map['id'];
-  //   dataCriacao = map['data_criacao'];
-  //   dataVencimento = map['data_vencimento'];
-  //   valor = double.tryParse(map['valor'].toString()) ?? 0.00;
-  //   tipo = map['tipo'];
-  //   idConta = map['id_conta'];
-  //   idUsuario = map['id_usuario'];
-  //   idGrupo = map['id_grupo'];
-  // }
-
-  
+  Movimentacao.fromMap(Map<String, dynamic> map) {
+    id = map['id'];
+    dataCriacao = map['data_criacao'];
+    dataVencimento = map['data_vencimento'];
+    valor = double.tryParse(map['valor'].toString()) ?? 0.00;
+    tipo = map['tipo'];
+    idConta = map['id_conta'];
+    idUsuario = map['id_usuario'];
+    idGrupo = map['id_grupo'];
+  }
 
   // Future<void> carregaRelacionamentos(
   //   List<RelacionamentosMovimentacao> relacionamentos,
