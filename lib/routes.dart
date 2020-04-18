@@ -1,5 +1,6 @@
+import 'package:biribi_financas/screens/login/login.dart';
 import 'package:flutter/material.dart';
-// import 'package:multiplier_app_novo/theme.dart' as ThemeApp;
+import 'package:biribi_financas/theme.dart' as ThemeApp;
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:overlay_support/overlay_support.dart';
@@ -9,7 +10,7 @@ import 'package:overlay_support/overlay_support.dart';
 class Routes {
   final routes = <String, WidgetBuilder>{
     '/login': (BuildContext context) => Login(),
-    '/home': (BuildContext context) => Home(),
+    // '/home': (BuildContext context) => Home(),
   };
 
 

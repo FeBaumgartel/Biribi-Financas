@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 abstract class Theme {
-  static final _primaryDefault = Color(0xFF825EE4);
+  static final _primaryDefault = Color(0xFF3F559E);
 
   static final defaultTheme = ThemeData(
     primaryColor: _primaryDefault,
