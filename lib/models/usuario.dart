@@ -1,24 +1,24 @@
 import 'grupo.dart';
 
-enum RelacionamentosUsuario {  asdf}
-class Usuario {
-	int id;
-	String nome;
-	String login;
-	String senha;
-	Grupo grupo;
-	int idGrupo;
+enum RelacionamentosUsuario { asdf }
 
-	Usuario(
-		{
-		this.id,
-		this.nome,
-		this.login,
-		this.senha,
-		this.idGrupo,
-		}
-	);
-	Map<String, dynamic> toMap() {
+class Usuario {
+  int id;
+  String nome;
+  String login;
+  String senha;
+  Grupo grupo;
+  int idGrupo;
+
+  Usuario({
+    this.id,
+    this.nome,
+    this.login,
+    this.senha,
+    this.idGrupo,
+  });
+  
+  Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
       'nome': nome,
@@ -27,6 +27,7 @@ class Usuario {
       'id_grupo': idGrupo,
     };
   }
+
 
   Usurio.fromMap(Map<String, dynamic> map) {
     id = map['id'];
