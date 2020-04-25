@@ -29,7 +29,7 @@ class Usuario {
   }
 
 
-  Usurio.fromMap(Map<String, dynamic> map) {
+  Usuario.fromMap(Map<String, dynamic> map) {
     id = map['id'];
     nome = map['nome'];
     login = map['login'];
