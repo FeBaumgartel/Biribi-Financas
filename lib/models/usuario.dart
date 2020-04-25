@@ -17,6 +17,7 @@ class Usuario {
     this.senha,
     this.idGrupo,
   });
+  
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
@@ -27,7 +28,8 @@ class Usuario {
     };
   }
 
-  Usuario.fromMap(Map<String, dynamic> map) {
+
+  Usurio.fromMap(Map<String, dynamic> map) {
     id = map['id'];
     nome = map['nome'];
     login = map['login'];
