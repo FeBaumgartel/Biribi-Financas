@@ -1,6 +1,7 @@
 import 'package:biribi_financas/models/conta.dart';
 import 'package:biribi_financas/models/grupo.dart';
 import 'package:biribi_financas/models/usuario.dart';
+import 'package:biribi_financas/services/usuarios.dart';
 
 enum RelacionamentosMovimentacao { conta, usuario, grupo }
 
@@ -52,55 +53,40 @@ class Movimentacao {
     idGrupo = map['id_grupo'];
   }
 
-  // Future<void> carregaRelacionamentos(
-  //   List<RelacionamentosMovimentacao> relacionamentos,
-  // ) async {
-  //   for (RelacionamentosMovimentacao relacionamento in relacionamentos) {
-  //     switch (relacionamento) {
-  //       case RelacionamentosMovimentacao.segmento:
-  //         await this.getSegmento();
-  //         break;
-  //       case RelacionamentosMovimentacao.subsegmento:
-  //         await this.getSubSegmento();
-  //         break;
-  //       case RelacionamentosMovimentacao.enderecos:
-  //         await this.getEndereco();
-  //         break;
-  //       case RelacionamentosMovimentacao.contatos:
-  //         await this.getContato();
-  //         break;
-  //       default:
-  //         break;
-  //     }
-  //   }
-  // }
+  Future<void> carregaRelacionamentos(
+    List<RelacionamentosMovimentacao> relacionamentos,
+  ) async {
+    for (RelacionamentosMovimentacao relacionamento in relacionamentos) {
+      switch (relacionamento) {
+        case RelacionamentosMovimentacao.conta:
+          await this.getConta();
+          break;
+        case RelacionamentosMovimentacao.grupo:
+          await this.getGrupo();
+          break;
+        case RelacionamentosMovimentacao.usuario:
+          await this.getUsuario();
+          break;
+        default:
+          break;
+      }
+    }
+  }
 
-  // Future<void> getSegmento() async {
-  //   var segmentos = new SegmentosService();
-  //   this.segmento = await segmentos.getSegmento(this.idSegmento);
-  // }
+  Future<void> getConta() async {
+    var contas = new ContasService();
+    this.conta = await contas.getConta(this.idConta);
+  }
 
-  // Future<void> getSubSegmento() async {
-  //   var subSegmentos = new SubSegmentosService();
-  //   this.subSegmento = await subSegmentos.getSubSegmento(this.idSubSegmento);
-  // }
+  Future<void> getGrupo() async {
+    var grupos = new GruposService();
+    this.grupo = await grupos.getGrupo(this.grupo);
+  }
 
-  // Future<void> getEndereco() async {
-  //   var clientesEnderecos = new MovimentacaosEnderecosService();
-  //   this.enderecos = await clientesEnderecos
-  //       .getMovimentacaoEnderecoByIdMovimentacao(this.idLocal, relacionamentos: [
-  //     RelacionamentosMovimentacaoEndereco.cidade,
-  //     RelacionamentosMovimentacaoEndereco.estado,
-  //     RelacionamentosMovimentacaoEndereco.pais
-  //   ]);
-  // }
-
-  // Future<void> getContato() async {
-  //   var clientesContatos = new MovimentacaosContatosService();
-  //   this.contatos = await clientesContatos
-  //       .getMovimentacaoContatoByIdMovimentacao(this.idLocal, relacionamentos: [
-  //     RelacionamentosMovimentacaoContato.cargo,
-  //     RelacionamentosMovimentacaoContato.interesses
-  //   ]);
-  // }
+  Future<void> getUsuario() async {
+    var usuarios = new UsuariosService();
+    this.usuario = await usuarios.getUsuario(this.idUsuario, relacionamentos: [
+      RelacionamentosUsuario.grupo,
+    ]);
+  }
 }

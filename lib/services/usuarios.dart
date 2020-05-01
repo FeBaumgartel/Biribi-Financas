@@ -1,5 +1,7 @@
 import 'package:biribi_financas/models/usuario.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:biribi_financas/services/database.dart' as data;
+
 
 class UsuariosService {
   final data.Database _database = data.Database.create();

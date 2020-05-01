@@ -1,6 +1,6 @@
 import 'grupo.dart';
 
-enum RelacionamentosUsuario { asdf }
+enum RelacionamentosUsuario { grupo }
 
 class Usuario {
   int id;
@@ -35,5 +35,24 @@ class Usuario {
     login = map['login'];
     senha = map['senha'];
     idGrupo = map['id_grupo'];
+  }
+
+  Future<void> carregaRelacionamentos(
+    List<RelacionamentosUsuario> relacionamentos,
+  ) async {
+    for (RelacionamentosUsuario relacionamento in relacionamentos) {
+      switch (relacionamento) {
+        case RelacionamentosUsuario.grupo:
+          await this.getGrupo();
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
+  Future<void> getGrupo() async {
+    var grupos = new GruposService();
+    this.grupo = await grupos.getGrupo(this.grupo);
   }
 }
