@@ -1,6 +1,8 @@
 import 'package:biribi_financas/models/conta.dart';
 import 'package:biribi_financas/models/grupo.dart';
 import 'package:biribi_financas/models/usuario.dart';
+import 'package:biribi_financas/services/contas.dart';
+import 'package:biribi_financas/services/grupos.dart';
 import 'package:biribi_financas/services/usuarios.dart';
 
 enum RelacionamentosMovimentacao { conta, usuario, grupo }
@@ -75,12 +77,17 @@ class Movimentacao {
 
   Future<void> getConta() async {
     var contas = new ContasService();
-    this.conta = await contas.getConta(this.idConta);
+    this.conta = await contas.getConta(this.idConta, relacionamentos: [
+      RelacionamentosConta.usuario,
+    ]);
   }
 
   Future<void> getGrupo() async {
     var grupos = new GruposService();
-    this.grupo = await grupos.getGrupo(this.grupo);
+    this.grupo = await grupos.getGrupo(this.idGrupo, relacionamentos: [
+      RelacionamentosGrupo.contas,
+      RelacionamentosGrupo.usuarios
+    ]);
   }
 
   Future<void> getUsuario() async {

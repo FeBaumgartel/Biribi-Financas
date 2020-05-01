@@ -13,15 +13,11 @@ class UsuariosService {
   }
 
   Future<List<Usuario>> getUsuarios({
-    int pagina = 1,
-    int porPagina = 10,
     List<RelacionamentosUsuario> relacionamentos,
   }) async {
     List<Map> maps = await _database.db.query(
       _tabela,
       orderBy: 'id DESC',
-      limit: porPagina,
-      offset: (porPagina * (pagina - 1)),
     );
 
     if (maps.length == 0) {
@@ -39,59 +35,14 @@ class UsuariosService {
     return usuarios;
   }
 
-  Future<List<Usuario>> getUsuariosFiltro(
-      {int pagina = 1,
-      int porPagina = 10,
-      List<RelacionamentosUsuario> relacionamentos,
-      List<Map> filtros,
-      String pesquisa}) async {
-    String tipo = '';
-    String status = '';
-    if (filtros != null)
-      for (Map filtro in filtros) {
-        if (filtro['titulo'] == "Tipo") {
-          switch (filtro['nome']) {
-            case "Pessoa Jurídica":
-              {
-                tipo += "1,";
-                break;
-              }
-            case "Pessoa Física":
-              {
-                tipo += "2,";
-                break;
-              }
-            case "Usuario de Exportação":
-              {
-                tipo += "3,";
-                break;
-              }
-          }
-        }
-        if (filtro['titulo'] == "Status") {
-          status += (filtro['nome'] == "Ativo" ? "1," : "2,");
-        }
-      }
-
-    if (tipo != '' && tipo.substring(tipo.length - 1) == ",") {
-      tipo = tipo.substring(0, tipo.length - 1);
-    }
-
-    if (status != '' && status.substring(status.length - 1) == ",") {
-      status = status.substring(0, status.length - 1);
-    }
-
-    if (pesquisa == null) {
-      pesquisa = "";
-    }
-
+  Future<List<Usuario>> getUsuariosByGrupo(int idGrupo,{
+    List<RelacionamentosUsuario> relacionamentos,
+  }) async {
     List<Map> maps = await _database.db.query(
       _tabela,
+      where: 'idGrupo = ?',
+      whereArgs: [idGrupo],
       orderBy: 'id DESC',
-      limit: porPagina,
-      offset: (porPagina * (pagina - 1)),
-      where:
-          "('$tipo' = '' OR tipo IN ($tipo)) AND ('$status' = '' OR status IN ($status)) AND (nome_fantasia LIKE '%$pesquisa%' OR razao_social LIKE '%$pesquisa%' OR cnpj_cpf LIKE '%$pesquisa%')",
     );
 
     if (maps.length == 0) {
@@ -103,25 +54,6 @@ class UsuariosService {
     for (dynamic p in maps) {
       Usuario usuario = Usuario.fromMap(p);
       await usuario.carregaRelacionamentos(relacionamentos);
-      usuarios.add(usuario);
-    }
-
-    return usuarios;
-  }
-
-  Future<List<Usuario>> getUsuariosAll() async {
-    List<Map> maps = await _database.db.query(
-      _tabela,
-    );
-
-    if (maps.length == 0) {
-      return new List<Usuario>();
-    }
-
-    List<Usuario> usuarios = new List<Usuario>();
-
-    for (dynamic p in maps) {
-      Usuario usuario = Usuario.fromMap(p);
       usuarios.add(usuario);
     }
 
@@ -134,7 +66,7 @@ class UsuariosService {
     if (id != null)
       maps = await _database.db.query(
         _tabela,
-        where: 'id_local = ?',
+        where: 'id = ?',
         whereArgs: [id],
       );
 
@@ -152,7 +84,7 @@ class UsuariosService {
   Future<int> delete(int id) async {
     return await _database.db.delete(
       _tabela,
-      where: 'id_local = ?',
+      where: 'id = ?',
       whereArgs: [id],
     );
   }
@@ -161,20 +93,9 @@ class UsuariosService {
     return await _database.db.update(
       _tabela,
       usuario.toMap(),
-      where: 'id_local = ?',
+      where: 'id = ?',
       whereArgs: [usuario.id],
     );
-  }
-
-  Future<bool> checkSincronizacao(Usuario usuario) async {
-    List<Map> maps = await _database.db
-        .query(_tabela, where: 'id = ?', whereArgs: [usuario.id]);
-
-    if (maps.length > 0) {
-      return true;
-    }
-
-    return false;
   }
 
   Future<Usuario> insertOrUpdate(Usuario usuario) async {

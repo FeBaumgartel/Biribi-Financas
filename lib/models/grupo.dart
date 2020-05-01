@@ -2,6 +2,8 @@
 
 import 'package:biribi_financas/models/conta.dart';
 import 'package:biribi_financas/models/usuario.dart';
+import 'package:biribi_financas/services/contas.dart';
+import 'package:biribi_financas/services/usuarios.dart';
 
 enum RelacionamentosGrupo { contas, usuarios }
 
@@ -47,11 +49,13 @@ class Grupo {
 
   Future<void> getContas() async {
     var contas = new ContasService();
-    this.contas = await contas.getConta(this.id);
+    this.contas = await contas.getContasByGrupo(this.id, relacionamentos: [
+      RelacionamentosConta.usuario,
+    ]);
   }
 
   Future<void> getUsuarios() async {
     var usuarios = new UsuariosService();
-    this.usuarios = await usuarios.getGrupo(this.id);
+    this.usuarios = await usuarios.getUsuariosByGrupo(this.id);
   }
 }

@@ -1,3 +1,5 @@
+import 'package:biribi_financas/services/grupos.dart';
+
 import 'grupo.dart';
 
 enum RelacionamentosUsuario { grupo }
@@ -53,6 +55,9 @@ class Usuario {
 
   Future<void> getGrupo() async {
     var grupos = new GruposService();
-    this.grupo = await grupos.getGrupo(this.grupo);
+    this.grupo = await grupos.getGrupo(this.idGrupo, relacionamentos: [
+      RelacionamentosGrupo.contas,
+      RelacionamentosGrupo.usuarios
+    ]);
   }
 }
