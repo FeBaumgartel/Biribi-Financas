@@ -5,7 +5,7 @@ import 'package:biribi_financas/services/database.dart' as data;
 
 class UsuariosService {
   final data.Database _database = data.Database.create();
-  final String _tabela = 'usuarios';
+  final String _tabela = 'usuario';
 
   Future<Usuario> insert(Usuario usuario) async {
     usuario.id = await _database.db.insert(_tabela, usuario.toMap());
@@ -101,6 +101,26 @@ class UsuariosService {
   Future<Usuario> insertOrUpdate(Usuario usuario) async {
     usuario.id = await _database.db.insert(_tabela, usuario.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
+    return usuario;
+  }
+
+  Future<Usuario> validarLogin(String login, String senha) async {
+    List<Map> maps = await _database.db.query(
+      _tabela,
+      where: 'login = ? and senha = ?',
+      whereArgs: [login, senha],
+      orderBy: 'id DESC',
+    );
+
+    Usuario usuario = new Usuario();
+    if (maps.length == 0) {
+      return null;
+    }
+
+
+      usuario = Usuario.fromMap(maps.first);
+      
+
     return usuario;
   }
 }

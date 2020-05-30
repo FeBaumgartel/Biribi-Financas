@@ -1,5 +1,6 @@
 import 'package:biribi_financas/models/usuario.dart';
 import 'package:biribi_financas/routes.dart';
+import 'package:biribi_financas/services/usuarios.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -20,7 +21,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
-
   final _formKey = GlobalKey<FormState>();
 
   ThemeNotifier themeNotifier;
@@ -29,6 +29,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
   TextEditingController _email = new TextEditingController();
   TextEditingController _senha = new TextEditingController();
+  final UsuariosService usuariosService = new UsuariosService();
 
   Animation<double> _formAnimation;
   AnimationController _formAnimationController;
@@ -82,10 +83,25 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
       _logoAnimationController.forward();
     });
-
   }
 
-  List<Usuario> _usuarios = new List<Usuario>();
+  void _showDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title: new Text("Eroo"),
+              content: new Text("Email ou senha inválido"),
+              actions: <Widget>[
+                new FlatButton(
+                  child: new Text("Fechar"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ]);
+        });
+  }
 
   ScaffoldFeatureController _scafoldController;
 
@@ -182,13 +198,22 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                 }),
                                 FormField(builder: (FormFieldState state) {
                                   return MaterialButton(
-                                    materialTapTargetSize:
-                                        MaterialTapTargetSize.shrinkWrap,
-                                    color: Theme.of(context).primaryColor,
-                                    textColor: Color(0xFFFFFFFF),
-                                    child: Text('Entrar'),
-                                    onPressed: () async {}
-                                  );
+                                      materialTapTargetSize:
+                                          MaterialTapTargetSize.shrinkWrap,
+                                      color: Theme.of(context).primaryColor,
+                                      textColor: Color(0xFFFFFFFF),
+                                      child: Text('Entrar'),
+                                      onPressed: () async {
+                                        var email = this._email.text;
+                                        var senha = this._senha.text;
+                                        Usuario usuario = await usuariosService
+                                            .validarLogin(email, senha);
+                                        if (usuario != null) {
+                                          await Navigator.pushNamed(
+                                              context, '/principal',
+                                              arguments: {'usuario': usuario});
+                                        } else {_showDialog();}
+                                      });
                                 }),
                               ],
                             ),

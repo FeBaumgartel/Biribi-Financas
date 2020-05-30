@@ -46,7 +46,8 @@ class Database {
         Sql.sqls.forEach((String sql) async {
           await db.execute(sql);
         });
-      }      // onDowngrade: Sqlite.onDatabaseDowngradeDelete
+      },
+      version: 1,  // onDowngrade: Sqlite.onDatabaseDowngradeDelete
     );
   }
 
