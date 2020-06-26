@@ -10,7 +10,7 @@ import 'package:overlay_support/overlay_support.dart';
 class Routes {
   final routes = <String, WidgetBuilder>{
     '/login': (BuildContext context) => Login(),
-    // '/home': (BuildContext context) => Home(),
+    '/principal': (BuildContext context) => Principal(),
   };
 
 

@@ -1,7 +1,6 @@
 import 'package:biribi_financas/models/usuario.dart';
 import 'package:biribi_financas/routes.dart';
 import 'package:biribi_financas/services/usuarios.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
