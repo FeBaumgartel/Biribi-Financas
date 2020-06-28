@@ -50,12 +50,12 @@ class Grupo {
   Future<void> getContas() async {
     var contas = new ContasService();
     this.contas = await contas.getContasByGrupo(this.id, relacionamentos: [
-      RelacionamentosConta.usuario,
+      RelacionamentosConta.movimentacoes,
     ]);
   }
 
   Future<void> getUsuarios() async {
     var usuarios = new UsuariosService();
-    this.usuarios = await usuarios.getUsuariosByGrupo(this.id);
+    this.usuarios = await usuarios.getUsuariosByGrupo(this.id,relacionamentos: []);
   }
 }

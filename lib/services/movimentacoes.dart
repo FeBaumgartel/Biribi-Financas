@@ -5,7 +5,7 @@ import 'package:biribi_financas/services/database.dart' as data;
 
 class MovimentacoesService {
   final data.Database _database = data.Database.create();
-  final String _tabela = 'movimentacoes';
+  final String _tabela = 'movimentacao';
 
   Future<Movimentacao> insert(Movimentacao movimentacao) async {
     movimentacao.id = await _database.db.insert(_tabela, movimentacao.toMap());
@@ -35,13 +35,13 @@ class MovimentacoesService {
     return movimentacoes;
   }
 
-  Future<List<Movimentacao>> getMovimentacoesByConta(int idConta,{
+  Future<List<Movimentacao>> getMovimentacoesByConta(int id_conta,{
     List<RelacionamentosMovimentacao> relacionamentos,
   }) async {
     List<Map> maps = await _database.db.query(
       _tabela,
-        where: 'idConta = ?',
-      whereArgs: [idConta],
+        where: 'id_conta = ?',
+      whereArgs: [id_conta],
       orderBy: 'id DESC',
     );
 

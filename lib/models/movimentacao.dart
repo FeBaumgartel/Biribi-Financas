@@ -12,12 +12,12 @@ class Movimentacao {
   String dataCriacao;
   String dataVencimento;
   double valor;
-  bool tipo;
-  int idConta;
+  int tipo;
+  int id_conta;
   Conta conta;
-  int idUsuario;
+  int id_usuario;
   Usuario usuario;
-  int idGrupo;
+  int id_grupo;
   Grupo grupo;
 
   Movimentacao({
@@ -26,33 +26,33 @@ class Movimentacao {
     this.dataVencimento,
     this.valor,
     this.tipo,
-    this.idConta,
-    this.idUsuario,
-    this.idGrupo,
+    this.id_conta,
+    this.id_usuario,
+    this.id_grupo,
   });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
-      'data_criacao': dataCriacao,
-      'data_vencimento': dataVencimento,
+      'dataCriacao': dataCriacao,
+      'dataVencimento': dataVencimento,
       'valor': valor,
       'tipo': tipo,
-      'id_conta': idConta,
-      'id_usuario': idUsuario,
-      'id_grupo': idGrupo,
+      'id_conta': id_conta,
+      'id_usuario': id_usuario,
+      'id_grupo': id_grupo,
     };
   }
 
   Movimentacao.fromMap(Map<String, dynamic> map) {
     id = map['id'];
-    dataCriacao = map['data_criacao'];
-    dataVencimento = map['data_vencimento'];
+    dataCriacao = map['dataCriacao'];
+    dataVencimento = map['dataVencimento'];
     valor = double.tryParse(map['valor'].toString()) ?? 0.00;
     tipo = map['tipo'];
-    idConta = map['id_conta'];
-    idUsuario = map['id_usuario'];
-    idGrupo = map['id_grupo'];
+    id_conta = map['id_conta'];
+    id_usuario = map['id_usuario'];
+    id_grupo = map['id_grupo'];
   }
 
   Future<void> carregaRelacionamentos(
@@ -77,23 +77,18 @@ class Movimentacao {
 
   Future<void> getConta() async {
     var contas = new ContasService();
-    this.conta = await contas.getConta(this.idConta, relacionamentos: [
+    this.conta = await contas.getConta(this.id_conta, relacionamentos: [
       RelacionamentosConta.usuario,
     ]);
   }
 
   Future<void> getGrupo() async {
     var grupos = new GruposService();
-    this.grupo = await grupos.getGrupo(this.idGrupo, relacionamentos: [
-      RelacionamentosGrupo.contas,
-      RelacionamentosGrupo.usuarios
-    ]);
+    this.grupo = await grupos.getGrupo(this.id_grupo,relacionamentos: []);
   }
 
   Future<void> getUsuario() async {
     var usuarios = new UsuariosService();
-    this.usuario = await usuarios.getUsuario(this.idUsuario, relacionamentos: [
-      RelacionamentosUsuario.grupo,
-    ]);
+    this.usuario = await usuarios.getUsuario(this.id_usuario,relacionamentos: []);
   }
 }

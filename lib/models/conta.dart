@@ -11,10 +11,10 @@ class Conta {
   int id;
   String nome;
   double saldo;
-  bool publica;
-  int idUsuario;
+  int publica;
+  int id_usuario;
   Usuario usuario;
-  int idGrupo;
+  int id_grupo;
   Grupo grupo;
   List<Movimentacao> movimentacoes;
 
@@ -23,8 +23,8 @@ class Conta {
     this.nome,
     this.saldo,
     this.publica,
-    this.idUsuario,
-    this.idGrupo,
+    this.id_usuario,
+    this.id_grupo,
   });
 
   Map<String, dynamic> toMap() {
@@ -33,8 +33,8 @@ class Conta {
       'nome': nome,
       'saldo': saldo,
       'publica': publica,
-      'id_usuario': idUsuario,
-      'id_grupo': idGrupo,
+      'id_usuario': id_usuario,
+      'id_grupo': id_grupo,
     };
   }
 
@@ -43,8 +43,8 @@ class Conta {
     nome = map['nome'];
     saldo = double.tryParse(map['saldo'].toString()) ?? 0.00;
     publica = map['publica'];
-    idUsuario = map['id_usuario'];
-    idGrupo = map['id_grupo'];
+    id_usuario = map['id_usuario'];
+    id_grupo = map['id_grupo'];
   }
 
   Future<void> carregaRelacionamentos(
@@ -70,24 +70,16 @@ class Conta {
   Future<void> getMovimentacoes() async {
     var movimentacoes = new MovimentacoesService();
     this.movimentacoes =
-        await movimentacoes.getMovimentacoesByConta(this.id, relacionamentos: [
-      RelacionamentosMovimentacao.grupo,
-      RelacionamentosMovimentacao.usuario
-    ]);
+        await movimentacoes.getMovimentacoesByConta(this.id,relacionamentos: []);
   }
 
   Future<void> getGrupo() async {
     var grupos = new GruposService();
-    this.grupo = await grupos.getGrupo(this.idGrupo, relacionamentos: [
-      RelacionamentosGrupo.contas,
-      RelacionamentosGrupo.usuarios
-    ]);
+    this.grupo = await grupos.getGrupo(this.id_grupo,relacionamentos: []);
   }
 
   Future<void> getUsuario() async {
     var usuarios = new UsuariosService();
-    this.usuario = await usuarios.getUsuario(this.idUsuario, relacionamentos: [
-      RelacionamentosUsuario.grupo,
-    ]);
+    this.usuario = await usuarios.getUsuario(this.id_usuario,relacionamentos: []);
   }
 }

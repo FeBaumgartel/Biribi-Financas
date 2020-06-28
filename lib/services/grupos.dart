@@ -5,7 +5,7 @@ import 'package:biribi_financas/services/database.dart' as data;
 
 class GruposService {
   final data.Database _database = data.Database.create();
-  final String _tabela = 'grupos';
+  final String _tabela = 'grupo';
 
   Future<Grupo> insert(Grupo grupo) async {
     grupo.id = await _database.db.insert(_tabela, grupo.toMap());

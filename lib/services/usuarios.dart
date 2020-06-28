@@ -1,4 +1,7 @@
+import 'package:biribi_financas/models/conta.dart';
+import 'package:biribi_financas/models/movimentacao.dart';
 import 'package:biribi_financas/models/usuario.dart';
+import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:biribi_financas/services/database.dart' as data;
 
@@ -35,13 +38,13 @@ class UsuariosService {
     return usuarios;
   }
 
-  Future<List<Usuario>> getUsuariosByGrupo(int idGrupo,{
+  Future<List<Usuario>> getUsuariosByGrupo(int id_grupo,{
     List<RelacionamentosUsuario> relacionamentos,
   }) async {
     List<Map> maps = await _database.db.query(
       _tabela,
-      where: 'idGrupo = ?',
-      whereArgs: [idGrupo],
+      where: 'id_grupo = ?',
+      whereArgs: [id_grupo],
       orderBy: 'id DESC',
     );
 
@@ -122,5 +125,29 @@ class UsuariosService {
       
 
     return usuario;
+  }
+
+  List<double> getValores(Usuario usuario){
+    usuario.carregaRelacionamentos([RelacionamentosUsuario.grupo]);
+    List<double> retorno = new List<double>(3);
+    retorno[0]=0.0;
+    retorno[1]=0.0;
+    retorno[2]=0.0;
+    DateTime data = DateTime.now();
+    for(Conta conta in usuario.grupo.contas){
+      retorno[0] += conta.saldo;
+      for(Movimentacao movimentacao in conta.movimentacoes){
+        print(movimentacao.dataCriacao);
+        DateTime datamovimentacao=DateTime.parse(movimentacao.dataCriacao);
+        if(data.month == datamovimentacao.month){
+          if(movimentacao.tipo==1){
+            retorno[1]+=movimentacao.valor;
+          }else{
+            retorno[2]+=movimentacao.valor;
+          }
+        }
+      }
+    }
+    return retorno;
   }
 }

@@ -10,14 +10,14 @@ class Usuario {
   String login;
   String senha;
   Grupo grupo;
-  int idGrupo;
+  int id_grupo;
 
   Usuario({
     this.id,
     this.nome,
     this.login,
     this.senha,
-    this.idGrupo,
+    this.id_grupo,
   });
   
   Map<String, dynamic> toMap() {
@@ -26,7 +26,7 @@ class Usuario {
       'nome': nome,
       'login': login,
       'senha': senha,
-      'id_grupo': idGrupo,
+      'id_grupo': id_grupo,
     };
   }
 
@@ -36,7 +36,7 @@ class Usuario {
     nome = map['nome'];
     login = map['login'];
     senha = map['senha'];
-    idGrupo = map['id_grupo'];
+    id_grupo = map['id_grupo'];
   }
 
   Future<void> carregaRelacionamentos(
@@ -55,9 +55,8 @@ class Usuario {
 
   Future<void> getGrupo() async {
     var grupos = new GruposService();
-    this.grupo = await grupos.getGrupo(this.idGrupo, relacionamentos: [
-      RelacionamentosGrupo.contas,
-      RelacionamentosGrupo.usuarios
+    this.grupo = await grupos.getGrupo(this.id_grupo, relacionamentos: [
+      RelacionamentosGrupo.contas
     ]);
   }
 }
