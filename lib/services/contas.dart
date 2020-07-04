@@ -59,6 +59,27 @@ class ContasService {
 
     return contas;
   }
+  
+  Future<List<Conta>> getContasByUsuario(int id_usuario) async {
+    List<Map> maps = await _database.db.query(
+      _tabela,
+      where: 'id_usuario = ?',
+      whereArgs: [id_usuario],
+      orderBy: 'id DESC',
+    );
+    if (maps.length == 0) {
+      return new List<Conta>();
+    }
+
+    List<Conta> contas = new List<Conta>();
+
+    for (dynamic p in maps) {
+      Conta conta = Conta.fromMap(p);
+      contas.add(conta);
+    }
+
+    return contas;
+  }
 
   Future<Conta> getConta(int id,
       {List<RelacionamentosConta> relacionamentos}) async {

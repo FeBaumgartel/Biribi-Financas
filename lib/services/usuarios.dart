@@ -137,7 +137,6 @@ class UsuariosService {
     for(Conta conta in usuario.grupo.contas){
       retorno[0] += conta.saldo;
       for(Movimentacao movimentacao in conta.movimentacoes){
-        print(movimentacao.dataCriacao);
         DateTime datamovimentacao=DateTime.parse(movimentacao.dataCriacao);
         if(data.month == datamovimentacao.month){
           if(movimentacao.tipo==1){
