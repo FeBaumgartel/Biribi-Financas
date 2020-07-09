@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:biribi_financas/services/movimentacao.dart';
 import 'package:biribi_financas/models/movimentacao.dart';
+import 'package:biribi_financas/services/conta.dart';
 
 class Movimentacao extends StatelessWidget{
   @Override
@@ -46,14 +47,16 @@ class MovimentacaoPage extends StatefulWidget {
             )
           ),
         ],
+        new Column(
         children: <Widget>[
           new Row(
             title: Text("Moeda")
             chlid: TextField(
               //
+             )
             )
-          )
-        ]
+          ]
+        )
         children: <Widget>[
           Container(
             new Row(
@@ -88,8 +91,19 @@ class MovimentacaoPage extends StatefulWidget {
             )
           )
         ]
-        // Widget _bottomButtons() {
-        //}
+         ButtonTheme(
+                height: 60.0,
+                child: RaisedButton(
+                  onPressed: () => { print("botao salvar"), },
+                  shape: new RoundedRectangleBorder(borderRadius:
+ new BorderRadius.circular(30.0)),
+                  child: Text(
+                    "Salvar",
+                    style: TextStyle(color: Colors.white, fontSize: 30),
+                  ), //Text
+                  color:Colors.red,
+                ),//RaisedButton
+              ),//ButtonTheme
           )
       ),
     );
