@@ -36,7 +36,7 @@ class _MovimentacaoPageState extends State<MovimentacaoPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Criando '+ (arguments["tipo"]== 1 ? 'Receita' : 'Despesa')),
+        title: Text('Criando '+ (arguments["tipo"] == 1 ? 'Receita' : 'Despesa')),
       ),
       body: Column(
         children: <Widget>[
