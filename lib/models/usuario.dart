@@ -1,3 +1,4 @@
+import 'package:biribi_financas/models/conta.dart';
 import 'package:biribi_financas/services/grupos.dart';
 
 import 'grupo.dart';
@@ -11,6 +12,7 @@ class Usuario {
   String senha;
   Grupo grupo;
   int id_grupo;
+  List<Conta> contas;
 
   Usuario({
     this.id,

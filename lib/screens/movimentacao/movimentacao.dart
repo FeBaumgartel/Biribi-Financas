@@ -1,26 +1,44 @@
+import 'package:biribi_financas/models/usuario.dart';
+import 'package:biribi_financas/services/contas.dart';
+import 'package:biribi_financas/services/movimentacoes.dart';
+import 'package:biribi_financas/services/usuarios.dart';
 import 'package:flutter/material.dart';
-import 'package:biribi_financas/services/movimentacao.dart';
-import 'package:biribi_financas/models/movimentacao.dart';
-import 'package:biribi_financas/services/conta.dart';
+import 'package:biribi_financas/models/movimentacao.dart' as Mov;
 
-/*
+class Movimentacao extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return new MovimentacaoPage();
+  }
+}
 
+class MovimentacaoPage extends StatefulWidget {
+  MovimentacaoPage({Key key}) : super(key: key);
 
-class FormularioTransferencia extends StatelessWidget {
-  final TextEditingController _controladorCampoNumeroConta =
-  TextEditingController();
-  final TextEditingController _controladorCampoNumeroValor =
-  TextEditingController();
+  @override
+  _MovimentacaoPageState createState() => _MovimentacaoPageState();
+}
+
+class _MovimentacaoPageState extends State<MovimentacaoPage> {
+  Usuario user;
+  final UsuariosService usuariosService = new UsuariosService();
+  final ContasService contasService = new ContasService();
+  final MovimentacoesService movimentacoesService = new MovimentacoesService();
+  dynamic arguments;
+
+  TextEditingController _conta = new TextEditingController();
+  TextEditingController _valor = new TextEditingController();
+  TextEditingController _vencimento = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    arguments = ModalRoute.of(context).settings.arguments;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Criando Transferencia'),
+        title: Text('Criando '+ (arguments["tipo"]== 1 ? 'Receita' : 'Despesa')),
       ),
-
-      body:
-      Column(
+      body: Column(
         children: <Widget>[
           Row(
             children: <Widget>[
@@ -29,9 +47,29 @@ class FormularioTransferencia extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    width: 150,
+                    width: 350,
                     child: TextField(
-                      controller: _controladorCampoNumeroConta,
+                      controller: _conta,
+                      style: TextStyle(fontSize: 24.0),
+                      decoration: InputDecoration(
+                          labelText: 'Id da Conta'),
+                      keyboardType: TextInputType.number,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: <Widget>[
+              Align(
+                alignment: Alignment.topLeft,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    width: 350,
+                    child: TextField(
+                      controller: _valor,
                       style: TextStyle(fontSize: 24.0),
                       decoration: InputDecoration(
                           icon: Icon(Icons.monetization_on),
@@ -42,128 +80,47 @@ class FormularioTransferencia extends StatelessWidget {
                   ),
                 ),
               ),
+            ],
+          ),
+          Row(
+            children: <Widget>[
               Align(
                 alignment: Alignment.topLeft,
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(75.0, 8.0, 8.0, 8.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    width: 150,
+                    width: 350,
                     child: TextField(
+                      controller: _vencimento,
                       style: TextStyle(fontSize: 24.0),
-                      decoration:
-                      InputDecoration(labelText: 'Moeda', hintText: '0.00'),
-                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                          icon: Icon(Icons.monetization_on),
+                          labelText: 'Data de Vencimento',
+                          hintText: 'DD/MM/YYYY'),
+                      keyboardType: TextInputType.text,
                     ),
                   ),
                 ),
               ),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              controller: _controladorCampoNumeroValor,
-              style: TextStyle(fontSize: 24.0),
-              decoration: InputDecoration(
-                  icon: Icon(Icons.monetization_on),
-                  labelText: 'Valor',
-                  hintText: '0.00'),
-              keyboardType: TextInputType.number,
-            ),
-          ),
           RaisedButton(
-            child: Text('Confirmar'),
-            onPressed: () {
-              final int numeroConta =
-              int.tryParse(_controladorCampoNumeroConta.text);
-              final double valor =
-              double.tryParse(_controladorCampoNumeroValor.text);
-              if (numeroConta != null && valor != null) {
-                final transferenciaCriada = Transferencia(valor, numeroConta);
-                debugPrint('$transferenciaCriada');
-              }
-            },
-          ),
+              child: Text('Confirmar'),
+              onPressed: () async {
+                print("sadfasdfasdfsd");
+                Mov.Movimentacao mov = new Mov.Movimentacao();
+                mov.id_conta = int.tryParse(_conta.text);
+                mov.id_usuario = arguments["usuario"].id;
+                mov.dataCriacao = DateTime.now().toString();
+                mov.dataVencimento = _vencimento.text;
+                mov.tipo = arguments["tipo"];
+                mov.valor = double.tryParse(_valor.text);
+
+                movimentacoesService.insert(mov);
+                Navigator.pushNamed(context, '/principal',arguments: {'usuario': arguments["usuario"]});
+              }),
         ],
       ),
     );
   }
 }
-
-class Editor extends StatelessWidget {
-  final TextEditingController _controlador;
-  String _rotulo;
-  String _dica;
-
-  Editor(this._controlador, this._rotulo, this._dica);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        width: 150,
-        child: TextField(
-          controller: _controlador,
-          style: TextStyle(fontSize: 24.0),
-          decoration: InputDecoration(
-              icon: Icon(Icons.monetization_on),
-              labelText: _rotulo,
-              hintText: _dica),
-          keyboardType: TextInputType.number,
-        ),
-      ),
-    );
-  }
-}
-
-class ListaTransferencia extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: <Widget>[
-          ItemTransferencia(Transferencia(100.0, 10000)),
-          ItemTransferencia(Transferencia(200.0, 20000)),
-          ItemTransferencia(Transferencia(300.0, 30000)),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-      ),
-      appBar: AppBar(
-        title: Text('Movimentação'),
-      ),
-    );
-  }
-}
-
-class ItemTransferencia extends StatelessWidget {
-  final Transferencia transferencia;
-
-  ItemTransferencia(this.transferencia);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: ListTile(
-        leading: Icon(Icons.monetization_on),
-        title: Text(transferencia.valor.toString()),
-        subtitle: Text(transferencia.numeroConta.toString()),
-      ),
-    );
-  }
-}
-
-class Transferencia {
-  final double valor;
-  final int numeroConta;
-
-  Transferencia(this.valor, this.numeroConta);
-
-  @override
-  String toString() {
-    return 'Transferencia{valor: $valor, numeroConta: $numeroConta}';
-  }
-}
- */

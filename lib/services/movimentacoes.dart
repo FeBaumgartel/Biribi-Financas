@@ -1,4 +1,6 @@
+import 'package:biribi_financas/models/conta.dart';
 import 'package:biribi_financas/models/movimentacao.dart';
+import 'package:biribi_financas/services/contas.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:biribi_financas/services/database.dart' as data;
 
@@ -6,9 +8,19 @@ import 'package:biribi_financas/services/database.dart' as data;
 class MovimentacoesService {
   final data.Database _database = data.Database.create();
   final String _tabela = 'movimentacao';
+  ContasService contasService = new ContasService();
 
   Future<Movimentacao> insert(Movimentacao movimentacao) async {
     movimentacao.id = await _database.db.insert(_tabela, movimentacao.toMap());
+
+    Conta conta = await contasService.getConta(movimentacao.id_conta);
+    if(movimentacao.tipo==0){
+      conta.saldo -= movimentacao.valor;
+    }else{
+      conta.saldo += movimentacao.valor;
+    }
+    contasService.insertOrUpdate(conta);
+
     return movimentacao;
   }
 
